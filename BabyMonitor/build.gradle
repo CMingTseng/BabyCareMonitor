@@ -5,14 +5,17 @@ android {
     compileSdkVersion rootProject.ext.compileSdkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
     dataBinding.enabled = true
+
     lintOptions {
         abortOnError false
     }
+
     dexOptions {
         maxProcessCount 8
         javaMaxHeapSize "4g"
         preDexLibraries true
     }
+
     defaultConfig {
         multiDexEnabled true
         applicationId "com.example.babymonitorce600"
@@ -25,16 +28,71 @@ android {
                 includeCompileClasspath = true
             }
         }
+//        ndk {
+//            abiFilters "arm64-v8a"
+//        }
     }
+
+//    splits {
+//        abi {
+//            enable true
+//            reset()
+//            include 'arm64-v8a'
+//            //select ABIs to build APKs for --  include 'x86', 'x86_64', 'armeabi-v7a', 'arm64-v8a'
+////            universalApk true //generate an additional APK that contains all the ABIs
+//        }
+//    }
 
     buildTypes {
         debug {
             signingConfig signingConfigs.debug
+            minifyEnabled false
+            applicationIdSuffix '.debug'
+            aaptOptions.cruncherEnabled = false
+            shrinkResources false
+            debuggable true
+            jniDebuggable true
+            renderscriptDebuggable true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            matchingFallbacks = ['debug']
         }
         release {
-            minifyEnabled false
             signingConfig null
+            aaptOptions.cruncherEnabled = false
+            shrinkResources false
+            minifyEnabled false //proguard  Yes / No
+            zipAlignEnabled false
+            debuggable false
+            jniDebuggable false
+            renderscriptDebuggable false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            matchingFallbacks = ['release']
+        }
+    }
+
+//    getSigningProperties()
+
+    applicationVariants.all { variant ->
+        def flavor = variant.productFlavors[0]
+        def flavorbuildname = variant.buildType.name
+        variant.buildConfigField "String", "API_SERVER_URL", "\"${flavor.ext.server[flavorbuildname]}\""
+        variant.outputs.all { output ->
+            def flavorname = variant.productFlavors[0].name
+            def outputFile = output.outputFile
+            if (outputFile != null && outputFile.name.endsWith('.apk')) {
+                def fileName = outputFile.name.replace("app-${flavorname}", "${flavorname}_${variant.versionName}_${rootProject.ext.appbuildTime}")
+                outputFileName = fileName
+            }
+        }
+        variant.assemble.doLast { assemble ->
+            def foldername = variant.productFlavors[0].name
+            copy {
+                from variant.outputs*.outputFile
+                into "../apk_output_folder/${flavorbuildname}/${foldername}"
+            }
+            if (flavorbuildname.equals('release')) {
+                delete variant.outputs*.outputFile
+            }
         }
     }
 
@@ -44,6 +102,68 @@ android {
             keyPassword 'android'
             storeFile file('../debug.keystore')
             storePassword 'android'
+        }
+    }
+
+//    def getSigningProperties() {
+//        def propFile = file('../signing.properties')
+//        if (propFile.exists() && propFile.canRead()) {
+//            def props = new Properties()
+//            props.load(new FileInputStream(propFile))
+//            if (props.containsKey('STORE_FILE') && props.containsKey('STORE_PASSWORD') &&
+//                    props.containsKey('KEY_ALIAS') && props.containsKey('KEY_PASSWORD')) {
+//                android.signingConfigs.release.storeFile = file('../' + props['STORE_FILE'])
+//                android.signingConfigs.release.storePassword = props['STORE_PASSWORD']
+//                android.signingConfigs.release.keyAlias = props['KEY_ALIAS']
+//                android.signingConfigs.release.keyPassword = props['KEY_PASSWORD']
+//            } else {
+//                println 'signing.properties are found but some entries are missed!'
+//                android.buildTypes.release.signingConfig = null
+//            }
+//        } else {
+//            println 'signing.properties are not found!'
+//            android.buildTypes.release.signingConfig = null
+//        }
+//    }
+
+    flavorDimensions "default"
+    productFlavors {
+        //https://developer.android.com/studio/build/gradle-plugin-3-0-0-migration.html
+        // Use command line  gradlew clean --stacktrace   &   gradlew assembleRelease --stacktrace to build apk
+        DefaultVersion {
+            dimension "default"
+            applicationId "com.example.default.babymonitorce600"
+            ext {
+                server = [debug: "https://debug.api.url", release: "https://release.api.url"]
+            }
+        }
+
+        OEMVersion {
+            dimension "default"
+            applicationId "com.example.oem.babymonitorce600"
+            ext {
+                server = [debug: "https://debug.api.url", release: "https://release.api.url"]
+            }
+        }
+    }
+
+    sourceSets {
+        main {
+            manifest.srcFile 'src/main/AndroidManifest.xml'
+            java.srcDirs = ['src/main/java']
+            aidl.srcDirs = ['src/main/aidl']
+            res.srcDirs = ['src/main/res']
+            assets.srcDirs = ['src/main/assets']
+        }
+
+        DefaultVersion {
+//            java.srcDirs = ['src/DefaultVersion/java', 'src/main/java']
+//            res.srcDirs = ['src/DefaultVersion/res']
+        }
+
+        OEMVersion {
+//            java.srcDirs = ['src/OEMVersion/java', 'src/main/java']
+//            res.srcDirs = ['src/OEMVersion/res']
         }
     }
 
