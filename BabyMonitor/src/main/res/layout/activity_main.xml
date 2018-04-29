@@ -1,48 +1,11 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/RelativeLayout1"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:background="#9FD9F6"
-    android:orientation="vertical"
-    tools:context="com.example.seat_bt.MainActivity" >
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.babymonitorce600.MainActivity">
 
-    <ImageView
-        android:id="@+id/imageView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:src="@drawable/connect" />
 
-    <ImageView
-        android:id="@+id/imagepower"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="35dp"
-        android:src="@drawable/power"
-        android:visibility="invisible" />
+    <include layout="@layout/content_main" />
 
-    <ImageView
-        android:id="@+id/imageView2"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/imageView1"
-        android:layout_alignParentLeft="true"
-        android:layout_marginBottom="15dp"
-        android:src="@drawable/line1"
-        android:visibility="invisible" />
-
-    <Button
-        android:id="@+id/button1"
-        android:layout_width="94.05dp"
-        android:layout_height="59.40dp"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="23dp"
-        android:layout_marginTop="65dp"
-        android:background="@drawable/exit" />
-
-</RelativeLayout>
+</android.support.design.widget.CoordinatorLayout>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="tag_view_holder" type="id" />
+    <item name="tag_spinner_view_holder" type="id" />
+    <item name="tag_dropdown_view_holder" type="id" />
+</resources>
+

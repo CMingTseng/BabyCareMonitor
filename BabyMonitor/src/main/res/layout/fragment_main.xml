@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.babymonitorce600.MainFragment"
+    tools:showIn="@layout/activity_main">
+
+    <Spinner
+        android:id="@+id/deviceslist"
+        android:layout_width="0dp"
+        android:layout_height="30dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        app:layout_constraintEnd_toStartOf="@+id/pair_password"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText
+        android:id="@+id/pair_password"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="1234"
+        app:layout_constraintBottom_toBottomOf="@+id/pair"
+        app:layout_constraintEnd_toStartOf="@+id/pair"
+        app:layout_constraintStart_toEndOf="@+id/deviceslist"
+        app:layout_constraintTop_toTopOf="@+id/pair" />
+
+    <Button
+        android:id="@+id/pair"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:text="pair"
+        app:layout_constraintBottom_toBottomOf="@+id/deviceslist"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/pair_password"
+        app:layout_constraintTop_toTopOf="@+id/deviceslist" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/pairlist"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        app:layoutManager="LinearLayoutManager"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/pair_password"
+        tools:listitem="@layout/item_baby_monitor" />
+</android.support.constraint.ConstraintLayout>

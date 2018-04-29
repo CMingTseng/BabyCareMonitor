@@ -31,6 +31,9 @@ android {
 //        ndk {
 //            abiFilters "arm64-v8a"
 //        }
+        buildConfigField "String", "BT_DEFAULT_KEY", '"1234"'
+        buildConfigField "String", "BT_HC_0506_KEY", '"00001101-0000-1000-8000-00805F9B34FB"'
+        buildConfigField "String", "BT_HC_08_KEY", '"0000fff4-0000-1000-8000-00805f9b34fb"'
     }
 
 //    splits {
@@ -126,12 +129,14 @@ android {
 //        }
 //    }
 
-    flavorDimensions "default"
+
+    flavorDimensions "bluetooth"
+
     productFlavors {
         //https://developer.android.com/studio/build/gradle-plugin-3-0-0-migration.html
         // Use command line  gradlew clean --stacktrace   &   gradlew assembleRelease --stacktrace to build apk
         DefaultVersion {
-            dimension "default"
+            dimension "bluetooth"
             applicationId "com.example.default.babymonitorce600"
             ext {
                 server = [debug: "https://debug.api.url", release: "https://release.api.url"]
@@ -139,7 +144,7 @@ android {
         }
 
         OEMVersion {
-            dimension "default"
+            dimension "bluetooth"
             applicationId "com.example.oem.babymonitorce600"
             ext {
                 server = [debug: "https://debug.api.url", release: "https://release.api.url"]
@@ -187,5 +192,6 @@ configurations.all {
 dependencies {
     implementation fileTree(include: ['*.jar', '*.aar'], dir: 'libs')
     implementation "com.android.support:appcompat-v7:${rootProject.ext.supportLibVersion}"
+    implementation "com.android.support:recyclerview-v7:${rootProject.ext.supportLibVersion}"
     implementation 'com.android.support.constraint:constraint-layout:1.1.0'
 }
