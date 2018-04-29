@@ -1,0 +1,71 @@
+apply plugin: 'com.android.application'
+apply plugin: 'com.gladed.androidgitversion'
+
+android {
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
+    dataBinding.enabled = true
+    lintOptions {
+        abortOnError false
+    }
+    dexOptions {
+        maxProcessCount 8
+        javaMaxHeapSize "4g"
+        preDexLibraries true
+    }
+    defaultConfig {
+        multiDexEnabled true
+        applicationId "com.example.babymonitorce600"
+        minSdkVersion rootProject.ext.minVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode androidGitVersion.code()
+        versionName androidGitVersion.name()
+        javaCompileOptions {
+            annotationProcessorOptions {
+                includeCompileClasspath = true
+            }
+        }
+    }
+
+    buildTypes {
+        debug {
+            signingConfig signingConfigs.debug
+        }
+        release {
+            minifyEnabled false
+            signingConfig null
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    signingConfigs {
+        debug {
+            keyAlias 'androiddebugkey'
+            keyPassword 'android'
+            storeFile file('../debug.keystore')
+            storePassword 'android'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility rootProject.ext.javasource
+        targetCompatibility rootProject.ext.javatarget
+    }
+}
+
+configurations.all {
+    resolutionStrategy.force 'com.google.code.findbugs:jsr305:3.0.2'
+    resolutionStrategy {
+        force 'com.android.databinding:baseLibrary:3.1.0'
+        force 'com.android.databinding:library:3.1.0'
+        force 'com.android.databinding:adapters:3.1.0'
+        failOnVersionConflict()
+        preferProjectModules()
+    }
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar', '*.aar'], dir: 'libs')
+    implementation "com.android.support:appcompat-v7:${rootProject.ext.supportLibVersion}"
+    implementation 'com.android.support.constraint:constraint-layout:1.1.0'
+}
